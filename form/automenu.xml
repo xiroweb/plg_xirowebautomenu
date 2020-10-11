@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field 
+			name="automenu" 
+			type="checkbox"
+			label="PLG_CONTENT_XIROWEBAUTOMENU_FIELD_AUTOMENU_LABEL"
+			description="PLG_CONTENT_XIROWEBAUTOMENU_FIELD_AUTOMENU_DESC"
+			checked="1"
+		/>
+	</fieldset>
+</form>
