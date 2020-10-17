@@ -27,6 +27,7 @@ class plgContentXirowebautomenu extends CMSPlugin
 
 	protected $autoloadLanguage = true;
 
+	protected $app;
 
     	/**
 	 * Constructor.
@@ -149,17 +150,88 @@ class plgContentXirowebautomenu extends CMSPlugin
 		}
 		catch (Exception $e)
 		{
-			// $response            = array();
-			// $response['success'] = false;
-			// $response['message'] = JText::sprintf('PLG_SAMPLEDATA_BLOG_STEP_FAILED', 2, $e->getMessage());
-
-			return false;
+			$this->app->enqueueMessage(JText::_('PLG_CONTENT_XIROWEBAUTOMENU_MENU_ITEM_CREATE_ERROR'), 'warning');
+			return true;
 		}
 
+		$this->app->enqueueMessage(JText::_('PLG_CONTENT_XIROWEBAUTOMENU_MENU_ITEM_CREATE_SUCCESS'), 'success');
 
 		return true;
 	}
 
+	public function onCategoryChangeState($extension, $pks, $value)
+	{
+		if (!in_array($extension, array('com_content')))
+		{
+			return true;
+		}
+
+		$menu_pks = array();
+		foreach ($pks as $pk) {
+			$menu_pks[] = $this->getMenuId($pk);
+		}
+
+		if (!count($menu_pks)) { return true; }
+
+		// Get MenuItemModel.
+		JLoader::register('MenusHelper', JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/models/', 'MenusModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
+		$this->menuItemModel = BaseDatabaseModel::getInstance('Item', 'MenusModel');
+
+		try
+		{
+			$this->menuItemModel->publish($menu_pks, $value);
+		}
+		catch (Exception $e)
+		{
+
+			return true;
+		}
+
+		$this->app->enqueueMessage(JText::_('PLG_CONTENT_XIROWEBAUTOMENU_MENU_ITEM_PUBLISH_'.$value), 'notice');
+
+		return true;
+	}
+
+	public function onContentAfterDelete($context, $article)
+	{
+
+		if (!in_array($context, array('com_categories.category')))
+		{
+			return true;
+		}
+
+		if (!in_array($article->extension, array('com_content'))) {
+			return true;
+		}
+
+		$this->getMenuId($pk);
+
+		// Get MenuItemModel.
+		JLoader::register('MenusHelper', JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/models/', 'MenusModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
+		$this->menuItemModel = BaseDatabaseModel::getInstance('Item', 'MenusModel');
+
+		$pk_menu = $this->getMenuId($article->id);
+
+		if (empty($pk_menu)) { return true; }
+
+		try
+		{
+			$this->menuItemModel->publish($pk_menu, '-2');
+			$this->menuItemModel->delete($pk_menu);
+		}
+		catch (Exception $e)
+		{
+			return true;
+		}
+
+		$this->app->enqueueMessage(JText::_('PLG_CONTENT_XIROWEBAUTOMENU_MENU_ITEM_DELETE_SUCCESS'), 'success');
+
+		return true;
+    }
 
 	/**
 	 * Adds menuitems.
@@ -239,8 +311,8 @@ class plgContentXirowebautomenu extends CMSPlugin
 
 		$query->where($db->quoteName('a.client_id') . ' = ' . (int) 0);
 
-		$query->where('a.published != -2')
-			->order('a.lft ASC');
+		// $query->where('a.published != -2');
+		$query->order('a.lft ASC');
 
 		// Get the options.
 		$db->setQuery($query);
