@@ -11,10 +11,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\Form;
-use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
@@ -29,12 +26,6 @@ class plgContentXirowebautomenu extends CMSPlugin
 
 	protected $app;
 
-    	/**
-	 * Constructor.
-	 *
-	 * @param 	$subject
-	 * @param	array $config
-	 */
 	function __construct(&$subject, $config = array()) {
 		// call parent constructor
 		parent::__construct($subject, $config);
@@ -95,7 +86,8 @@ class plgContentXirowebautomenu extends CMSPlugin
 			return true;
 		}
 
-		if (!$this->checkMainMenu()) {
+		if (!$this->checkMainMenu()) 
+		{
 			return true;
 		}
 	
@@ -186,13 +178,14 @@ class plgContentXirowebautomenu extends CMSPlugin
 			
 			);
 
-			if ($item->parent_id > 1) {
+			if ($item->parent_id > 1) 
+			{
 				$menuItem['parent_id']= $this->getMenuId($item->parent_id);
 			}
 
 		try
 		{
-			$menuIdsLevel1 = $this->addMenuItem($menuItem);
+			$this->addMenuItem($menuItem);
 		}
 		catch (Exception $e)
 		{
@@ -213,11 +206,16 @@ class plgContentXirowebautomenu extends CMSPlugin
 		}
 
 		$menu_pks = array();
-		foreach ($pks as $pk) {
+
+		foreach ($pks as $pk) 
+		{
 			$menu_pks[] = $this->getMenuId($pk);
 		}
 
-		if (!count($menu_pks)) { return true; }
+		if (!count($menu_pks)) 
+		{
+			return true;
+		}
 
 		// Get MenuItemModel.
 		JLoader::register('MenusHelper', JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php');
@@ -252,17 +250,16 @@ class plgContentXirowebautomenu extends CMSPlugin
 			return true;
 		}
 
-		$this->getMenuId($pk);
+		$pk_menu = $this->getMenuId($article->id);
 
-		// Get MenuItemModel.
+		if (empty($pk_menu)) {
+			return true; 
+		}
+		
 		JLoader::register('MenusHelper', JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php');
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/models/', 'MenusModel');
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
 		$this->menuItemModel = BaseDatabaseModel::getInstance('Item', 'MenusModel');
-
-		$pk_menu = $this->getMenuId($article->id);
-
-		if (empty($pk_menu)) { return true; }
 
 		try
 		{
@@ -373,7 +370,8 @@ class plgContentXirowebautomenu extends CMSPlugin
 		}
 		$id_menu = array();
 
-		foreach ($menus as $key => $menuitem) {
+		foreach ($menus as $key => $menuitem)
+		{
 			$args = array();
 			parse_str(parse_url($menuitem['link'], PHP_URL_QUERY), $args);	
 			if (isset($args['id'])) {
@@ -383,7 +381,8 @@ class plgContentXirowebautomenu extends CMSPlugin
 			}
 		} 
 
-		if (count($id_menu)) {
+		if (count($id_menu)) 
+		{
 			return $id_menu[0];
 		} else {
 			return 1;
