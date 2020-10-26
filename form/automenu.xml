@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field 
+			name="automenu" 
+			type="radio"
+			label="PLG_CONTENT_XIROWEBAUTOMENU_FIELD_AUTOMENU_LABEL"
+			description="PLG_CONTENT_XIROWEBAUTOMENU_FIELD_AUTOMENU_DESC"
+			default="1"
+			class="btn-group btn-group-yesno"
+		>
+			<option value="1">PLG_CONTENT_XIROWEBAUTOMENU_YES</option>
+			<option value="0">PLG_CONTENT_XIROWEBAUTOMENU_NO</option>
+		</field>
+	</fieldset>
+</form>

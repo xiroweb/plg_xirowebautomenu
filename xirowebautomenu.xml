@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3.0" type="plugin" group="content" method="upgrade">
+        <name>plg_content_xirowebautomenu</name>
+        <author>Dustin Dzung</author>
+        <creationDate>October 2020</creationDate>
+        <copyright>Copyright (C) 2020 XiroWeb. All rights reserved.</copyright>
+        <license>GNU General Public License version 2 or later;</license>
+        <authorEmail>support@xiroweb.com</authorEmail>
+        <authorUrl>www.xiroweb.com</authorUrl>
+        <version>1.0.5</version>
+        <description>PLG_CONTENT_XIROWEBAUTOMENU_DESCRIPTION</description>
+        <files>
+                <filename plugin="xirowebautomenu">xirowebautomenu.php</filename>
+                <filename>index.html</filename>
+                <folder>form</folder>
+                <folder>language</folder>
+        </files>
+        <languages>
+            <language tag="en-GB">language/en-GB/en-GB.plg_content_xirowebautomenu.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.plg_content_xirowebautomenu.sys.ini</language>
+            <language tag="vi-VN">language/vi-VN/vi-VN.plg_content_xirowebautomenu.ini</language>
+            <language tag="vi-VN">language/vi-VN/vi-VN.plg_content_xirowebautomenu.sys.ini</language>
+        </languages>
+</extension>
