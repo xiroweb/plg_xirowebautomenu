@@ -263,19 +263,10 @@ class plgContentXirowebautomenu extends CMSPlugin
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
 		$this->menuItemModel = BaseDatabaseModel::getInstance('Item', 'MenusModel');
 
-		if ($article->published > -2) {
-			try
-			{
-				$this->menuItemModel->publish($pk_menu, '-2');
-			}
-			catch (Exception $e)
-			{
-				return true;
-			}
-		} 
-
 		try
 		{
+			// maybe user active menu item after trash category item
+			$this->menuItemModel->publish($pk_menu, '-2');
 			$this->menuItemModel->delete($pk_menu);
 		}
 		catch (Exception $e)
