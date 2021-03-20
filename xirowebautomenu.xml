@@ -21,4 +21,7 @@
             <language tag="vi-VN">language/vi-VN/vi-VN.plg_content_xirowebautomenu.ini</language>
             <language tag="vi-VN">language/vi-VN/vi-VN.plg_content_xirowebautomenu.sys.ini</language>
         </languages>
+        <updateservers>
+            <server type="extension" name="Update XiroWeb plugin AutoMenu">https://updateserver.xiroweb.com/plugins/plg_system_updateserver/update.xml</server>
+        </updateservers>
 </extension>
