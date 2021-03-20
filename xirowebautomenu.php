@@ -29,6 +29,8 @@ class plgContentXirowebautomenu extends CMSPlugin
 	function __construct(&$subject, $config = array()) {
 		// call parent constructor
 		parent::__construct($subject, $config);
+
+
 	}
 
 	public function onContentPrepareForm(Form $form, $data)
@@ -180,7 +182,11 @@ class plgContentXirowebautomenu extends CMSPlugin
 
 			if ($item->parent_id > 1) 
 			{
-				$menuItem['parent_id']= $this->getMenuId($item->parent_id);
+				$parent_ids = $this->getMenuId($item->parent_id);
+
+				if (count($parent_ids)) {
+					$menuItem['parent_id'] = $parent_ids[0];
+				}
 			}
 
 		try
@@ -204,15 +210,11 @@ class plgContentXirowebautomenu extends CMSPlugin
 		{
 			return true;
 		}
+	
+		$menu_pks = $this->getMenuId($pks);
+		
 
-		$menu_pks = array();
-
-		foreach ($pks as $pk) 
-		{
-			$menu_pks[] = $this->getMenuId($pk);
-		}
-
-		if (!count($menu_pks)) 
+		if (empty($menu_pks)) 
 		{
 			return true;
 		}
@@ -261,15 +263,26 @@ class plgContentXirowebautomenu extends CMSPlugin
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
 		$this->menuItemModel = BaseDatabaseModel::getInstance('Item', 'MenusModel');
 
+		if ($article->published > -2) {
+			try
+			{
+				$this->menuItemModel->publish($pk_menu, '-2');
+			}
+			catch (Exception $e)
+			{
+				return true;
+			}
+		} 
+
 		try
 		{
-			$this->menuItemModel->publish($pk_menu, '-2');
 			$this->menuItemModel->delete($pk_menu);
 		}
 		catch (Exception $e)
 		{
 			return true;
 		}
+	
 
 		$this->app->enqueueMessage(JText::_('PLG_CONTENT_XIROWEBAUTOMENU_MENU_ITEM_DELETE_SUCCESS'), 'success');
 
@@ -345,6 +358,10 @@ class plgContentXirowebautomenu extends CMSPlugin
 
 	protected function getMenuId($cat_id)
 	{
+		if (!is_array($cat_id)){
+			$cat_id = (array) $cat_id;
+		}
+
 		$db = Factory::getDbo();
 		$query = $db->getQuery(true)
 			->select('DISTINCT(a.id) AS id, a.link as link')
@@ -368,27 +385,24 @@ class plgContentXirowebautomenu extends CMSPlugin
 		{
 			JError::raiseWarning(500, $e->getMessage());
 		}
-		$id_menu = array();
+
+		$ids_menu = array();
 
 		foreach ($menus as $key => $menuitem)
 		{
 			$args = array();
 			parse_str(parse_url($menuitem['link'], PHP_URL_QUERY), $args);	
 			if (isset($args['id'])) {
-					if($args['id'] == $cat_id) {
-						$id_menu[] = $menuitem['id'];
+					if(in_array($args['id'], $cat_id)) {
+						$ids_menu[] = $menuitem['id'];
 					}
 			}
 		} 
 
-		if (count($id_menu)) 
-		{
-			return $id_menu[0];
-		} else {
-			return 1;
-		}
+		return $ids_menu;
 
 	}
+
 
 	protected function checkMainMenu()
 	{
