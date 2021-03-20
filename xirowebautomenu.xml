@@ -7,7 +7,7 @@
         <license>GNU General Public License version 2 or later;</license>
         <authorEmail>support@xiroweb.com</authorEmail>
         <authorUrl>www.xiroweb.com</authorUrl>
-        <version>1.0.5</version>
+        <version>1.0.6</version>
         <description>PLG_CONTENT_XIROWEBAUTOMENU_DESCRIPTION</description>
         <files>
                 <filename plugin="xirowebautomenu">xirowebautomenu.php</filename>
@@ -21,4 +21,7 @@
             <language tag="vi-VN">language/vi-VN/vi-VN.plg_content_xirowebautomenu.ini</language>
             <language tag="vi-VN">language/vi-VN/vi-VN.plg_content_xirowebautomenu.sys.ini</language>
         </languages>
+        <updateservers>
+            <server type="extension" name="Update XiroWeb plugin AutoMenu">https://updateserver.xiroweb.com/plugins/plg_system_updateserver/update.xml</server>
+        </updateservers>
 </extension>
