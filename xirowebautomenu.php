@@ -266,7 +266,9 @@ class plgContentXirowebautomenu extends CMSPlugin
 		try
 		{
 			// maybe user active menu item after trash category item
-			$this->menuItemModel->publish($pk_menu, '-2');
+			$pk_menu_publish = $pk_menu;
+			$this->menuItemModel->publish($pk_menu_publish, '-2');
+
 			$this->menuItemModel->delete($pk_menu);
 		}
 		catch (Exception $e)
