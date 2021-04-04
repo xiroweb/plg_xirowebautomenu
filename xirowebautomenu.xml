@@ -7,7 +7,7 @@
         <license>GNU General Public License version 2 or later;</license>
         <authorEmail>support@xiroweb.com</authorEmail>
         <authorUrl>www.xiroweb.com</authorUrl>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
         <description>PLG_CONTENT_XIROWEBAUTOMENU_DESCRIPTION</description>
         <files>
                 <filename plugin="xirowebautomenu">xirowebautomenu.php</filename>
